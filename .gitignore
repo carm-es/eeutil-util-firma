@@ -42,6 +42,7 @@ local.properties
 .externalToolBuilders/
 *.launch
 .buildpath
+WebContent/
  
 # phpstorm
 .idea/
