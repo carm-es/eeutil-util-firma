@@ -9,9 +9,7 @@
 	a copy of the EUPL1.1 license along with this program; if not, you may find 
 	it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>eeutil-util-firma</artifactId>
 	<packaging>war</packaging>
@@ -19,7 +17,7 @@
 	<parent>
 		<groupId>es.gob.aapp.eeutil</groupId>
 		<artifactId>eeutil-mvn-base-util-firma</artifactId>
-		<version>4.2.0-CARM.1-SNAPSHOT</version>
+		<version>4.2.0-CARM.1</version>
 		<relativePath>../eeutil-mvn-base</relativePath>
 	</parent>
 
@@ -137,8 +135,7 @@
 
 					</systemProperties>
 					<connectors>
-						<connector
-							implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+						<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
 							<port>${jetty.port}</port>
 							<maxIdleTime>30000</maxIdleTime>
 						</connector>
