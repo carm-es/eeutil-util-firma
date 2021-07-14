@@ -17,7 +17,7 @@
 	<parent>
 		<groupId>es.gob.aapp.eeutil</groupId>
 		<artifactId>eeutil-mvn-base-util-firma</artifactId>
-		<version>4.2.0-CARM.2</version>
+		<version>4.2.0-CARM.3-SNAPSHOT</version>
 		<relativePath>../eeutil-mvn-base</relativePath>
 	</parent>
 
