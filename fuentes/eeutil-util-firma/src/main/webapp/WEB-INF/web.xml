@@ -15,11 +15,14 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
 	version="2.4">
 	<description>eeutil-util-firma WS</description>
-
-
-	
-
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->
+	<context-param>
+		<param-name>log4jConfiguration</param-name>
+		<param-value>file:${sys:catalina.home}/conf/eeutil-util-firma/log4j2.xml</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.apache.logging.log4j.web.Log4jServletContextListener</listener-class>
+	</listener>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
