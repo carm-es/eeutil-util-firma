@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>es.carm.eeutil</groupId>
 		<artifactId>util-firma-mvn-base-wrapper</artifactId>
-		<version>4.2.0-CARM.4-SNAPSHOT</version>
+		<version>4.2.0-CARM.4</version>
 		<relativePath>../..</relativePath>
 	</parent>
 
