@@ -77,6 +77,17 @@
       <artifactId>qrgen</artifactId>
       <version>1.3</version>
     </dependency>
+    <!-- PDF TOOLS -->
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>pdfbox</artifactId>
+      <version>${pdfbox.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>xmpbox</artifactId>
+      <version>${pdfbox.version}</version>
+    </dependency>
     <!-- APP -->
     <dependency>
       <groupId>es.gob.aapp.eeutil</groupId>
@@ -97,13 +108,6 @@
       <groupId>es.gob.aapp.eeutil</groupId>
       <artifactId>eeutil-pdf-conversion</artifactId>
       <version>${version.eeutils-shared}</version>
-    </dependency>
-    <!-- pdfoptmizer pdftools -->
-    <dependency>
-      <groupId>com.pdfTools</groupId>
-      <artifactId>pDFOptimizer-windows</artifactId>
-      <version>4.8</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -180,11 +184,6 @@
           <type>jar</type>
           <scope>provided</scope>
         </dependency>
-        <dependency>
-          <groupId>com.pdfTools</groupId>
-          <artifactId>pDFOptimizer-linux</artifactId>
-          <version>4.8</version>
-        </dependency>
       </dependencies>
     </profile>
     <profile>
@@ -192,13 +191,6 @@
       <activation>
         <activeByDefault>true</activeByDefault>
       </activation>
-      <dependencies>
-        <dependency>
-          <groupId>com.pdfTools</groupId>
-          <artifactId>pDFOptimizer-linux</artifactId>
-          <version>4.8</version>
-        </dependency>
-      </dependencies>
     </profile>
     <profile>
       <id>debug</id>
