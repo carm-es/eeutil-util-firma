@@ -1,4 +1,4 @@
-<!-- Copyright (C) 2012-13 MINHAP, Gobierno de España
+<!-- Copyright (C) 2025, Gobierno de España
    This program is licensed and may be used, modified and redistributed under the terms
    of the European Public License (EUPL), either version 1.1 or (at your
    option) any later version as soon as they are approved by the European Commission.
@@ -23,27 +23,33 @@
 			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd 
 			  http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-	<import resource="classpath:es/mpt/dsic/inside/context/quartz.xml" />
-
-	<context:component-scan base-package="es.mpt.dsic.loadTables" />
+	<context:component-scan base-package="es.mpt.dsic.loadTables, es.mpt.dsic.loadTables.schredule" />
 
 	<context:property-placeholder
 		location="file:${config.path}/loadTables-config.properties"
 		ignore-unresolvable="true" />
-
-	<bean id="unidadOrganicaController"
-		class="es.mpt.dsic.loadTables.controller.UnidadOrganicaController">
+		
+		
+	<bean id="unidadOrganicaTask" class="es.mpt.dsic.loadTables.schredule.UnidadOrganicaTask">
 		<property name="unidadOrganicaService" ref="unidadOrganicaService" />
 		<property name="consumerUnidades" ref="clientUnidadesOrganicas"/>
 		<property name="consumerOficinas" ref="clientOficinas"/>
-		<property name="rutaTemp" value="${Path.temp}"></property>
-		<property name="ficheroTxtTemporal" value="Organismo_temp.txt"></property>
-		<property name="ficheroZipTemporal" value="Organismo_temp.zip"></property>
-		<property name="pathDescompresion" value="organismo"></property>
-		<property name="ficheroOficinasTxtTemporal" value="Oficinas_temp.txt"></property>
-		<property name="ficheroOficinasZipTemporal" value="Oficinas_temp.zip"></property>
-		<property name="pathDescompresionOficinas" value="oficinas"></property>
-	</bean>
+	</bean>	
+		
+
+<!-- 	<bean id="unidadOrganicaController" -->
+<!-- 		class="es.mpt.dsic.loadTables.controller.UnidadOrganicaController"> -->
+<!-- 		<property name="unidadOrganicaService" ref="unidadOrganicaService" /> -->
+<!-- 		<property name="consumerUnidades" ref="clientUnidadesOrganicas"/> -->
+<!-- 		<property name="consumerOficinas" ref="clientOficinas"/> -->
+<!-- 		<property name="rutaTemp" value="${Path.temp}"></property> -->
+<!-- 		<property name="ficheroTxtTemporal" value="Organismo_temp.txt"></property> -->
+<!-- 		<property name="ficheroZipTemporal" value="Organismo_temp.zip"></property> -->
+<!-- 		<property name="pathDescompresion" value="organismo"></property> -->
+<!-- 		<property name="ficheroOficinasTxtTemporal" value="Oficinas_temp.txt"></property> -->
+<!-- 		<property name="ficheroOficinasZipTemporal" value="Oficinas_temp.zip"></property> -->
+<!-- 		<property name="pathDescompresionOficinas" value="oficinas"></property> -->
+<!-- 	</bean> -->
 
 	<bean id="clientUnidadesOrganicas" class="es.mpt.dsic.loadTables.service.impl.ConsumidorDir">
 		<property name="user" value="${ws.unidadesOrganicas.login}"></property>

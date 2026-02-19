@@ -1,16 +1,3 @@
-<!-- Copyright (C) 2012-13 MINHAP, Gobierno de España
-   This program is licensed and may be used, modified and redistributed under the terms
-   of the European Public License (EUPL), either version 1.1 or (at your
-   option) any later version as soon as they are approved by the European Commission.
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-   or implied. See the License for the specific language governing permissions and
-   more details.
-   You should have received a copy of the EUPL1.1 license
-   along with this program; if not, you may find it at
-   http://joinup.ec.europa.eu/software/page/eupl/licence-eupl -->
-
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:context="http://www.springframework.org/schema/context"
@@ -68,25 +55,34 @@
 		<property name="defaultAutoCommit">
 			<value>false</value>
 		</property>
+		<!-- numero de maximo de milisegundos de espera. -->
 		<property name="maxWait">
-			<value>-1</value>
+			<value>${databaseGen.maxWait}</value>
 		</property>
 		<property name="maxIdle">
-			<value>10</value>
+			<value>${databaseGen.maxIdle}</value>
 		</property>
+		<property name="minIdle">
+			<value>${databaseGen.minIdle}</value>
+		</property>		
 		<property name="maxActive">
-			<value>20</value>
+			<value>${databaseGen.maxActive}</value>
 		</property>
-
 	</bean>
-
-
 
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
 		p:dataSource-ref="dataSource" p:jpaVendorAdapter-ref="jpaAdapter"
 		p:persistenceProvider-ref="persistenceProvider" p:packagesToScan="es.mpt"
 		p:jpaDialect-ref="jpaDialect">
+	    <property name="jpaPropertyMap">
+	        <map>
+	            <entry key="hibernate.cache.region.factory_class" value="net.sf.ehcache.hibernate.EhCacheRegionFactory"/>
+	            <entry key="hibernate.cache.use_second_level_cache" value="true"/>
+	            <entry key="hibernate.cache.use_query_cache" value="true"/>
+	            <entry key="javax.persistence.sharedCache.mode" value="ENABLE_SELECTIVE" />
+	        </map>
+	    </property>
 
 
 	</bean>
@@ -96,16 +92,15 @@
 		<property name="showSql" value="${databaseGen.showSql}" />
 		<property name="generateDdl" value="false" />
 		<property name="databasePlatform" value="${databaseGen.hibernateDialect}" />
-
 	</bean>
 
 
 	<bean id="jpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect">
 	</bean>
-	<bean
-		class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
-	<bean
-		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+<!-- 	<bean -->
+<!-- 		class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" /> -->
+<!-- 	<bean -->
+<!-- 		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" /> -->
 
 
 </beans>

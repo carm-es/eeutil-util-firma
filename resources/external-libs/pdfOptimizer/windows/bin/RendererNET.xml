@@ -1,0 +1,277 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RendererNET</name>
+    </assembly>
+    <members>
+        <member name="T:Pdftools.Render.PDFCopyMode">
+            <summary>
+            Order of pages to use if several copies of a document are printed.
+            </summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFCopyMode.eCopyModePage">
+            <summary>Print by page (1,1,..2,2,..3,3,..)</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFCopyMode.eCopyModeDocument">
+            <summary>Print by document (1,2,3,..1,2,3..)</summary>
+        </member>
+        <member name="T:Pdftools.Render.PDFPrintOrientation">
+            <summary></summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFPrintOrientation.ePrintOrientationAutomatic">
+            <summary>automatic</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFPrintOrientation.ePrintOrientationDefault">
+            <summary>use printer setting (default)</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFPrintOrientation.ePrintOrientationForcePortrait">
+            <summary>force portrait</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFPrintOrientation.ePrintOrientationForceLandscape">
+            <summary>force landscape</summary>
+        </member>
+        <member name="T:Pdftools.Render.PDFDitheringMode">
+            <summary></summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFDitheringMode.eDitherNone">
+            <summary>No dithering</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFDitheringMode.eDitherFloydSteinberg">
+            <summary>Floyd-Steinberg</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFDitheringMode.eDitherHalftone">
+            <summary>Half-toning</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFDitheringMode.eDitherPattern">
+            <summary>Pattern Dithering</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFDitheringMode.eDitherG3Optimized">
+            <summary>optimized to compress well with Group 3</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFDitheringMode.eDitherG4Optimized">
+            <summary>optimized to compress well with Group 4</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFDitheringMode.eDitherAtkinson">
+            <summary>Atkinson</summary>
+        </member>
+        <member name="T:Pdftools.Render.PDFRotateMode">
+            <summary></summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRotateMode.eRotateNone">
+            <summary>(default) no rotation</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRotateMode.eRotateAttribute">
+            <summary>rotation of the page attribute</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRotateMode.eRotatePortrait">
+            <summary>rotate to portrait</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRotateMode.eRotateLandscape">
+            <summary>rotate to landscape</summary>
+        </member>
+        <member name="T:Pdftools.Render.PDFRendererOption">
+            <summary>
+            Rendering Options. Some are for printer output only and ignored if used for images rendering without printing.
+            Highest quality is obtained by combining eOptionHighQuality and eOptionBicubic, this combination also requires the most CPU power.
+            </summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionJPEG">
+            <summary>Convert bitmaps to the JPEG format if supported to reduce the size of the spool file. (printer output only)</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionPNG">
+            <summary>Convert bitmaps to the PNG format if supported to reduce the size of the spool file. (printer output only)</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionTransparency">
+            <summary>Deprecated.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionBanding">
+            <summary>Use banding to split bitmaps into 64k pieces for older printers with limited memory. (printer output only)</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionType1">
+            <summary>Convert simple OpenType to Type1 fonts.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionBitmap">
+            <summary>Send a pre-rendered bitmap to the physical device. (printer output only)</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionTrueType">
+            <summary>Convert CFF and Type1 fonts to TrueType. Overrules option 'eOptionType1'.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionHighQuality">
+            <summary>Use high quality rendering.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionBilinear">
+            <summary>Use bilinear interpolation mode to improve image quality. Cannot be combined with option 'eOptionBicubic'.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionBicubic">
+            <summary>Use bicubic interpolation mode to improve image quality. Cannot be combined with option 'eOptionBilinear'.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionNoEmbedded">
+            <summary>Don't use embedded fonts.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionWindows9x">
+            <summary>Use Windows 9x compatible printer driver interface. Can resolve issues with nested transformation matrices which are not supported by all devices/printer (printer output only)</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionOutlines">
+            <summary>Convert CFF and Type1 fonts to graphics outlines (GDI+ only). By default, outlines are not rendered as suggested by the PDF Reference. Some fonts require the outlines to be rendered to become readable.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionOpenType">
+            <summary>Convert Type1 to OpenType fonts.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionDisablePS">
+            <summary>Disable PostScript injection. (printer output only)</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionDisablePatterns">
+            <summary>Disable patterns; use light gray instead.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionUseFastImages">
+            <summary>Use fast mode image rendering even in accurate mode. Should help resolving performance issues with complex images and image masks of documents that are to be printed in accurate mode.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionDoNotPrintSig">
+            <summary>Do not print digital signature appearances.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionPrintOnlySig">
+            <summary>Print the signature appearance only (without any status appearances).</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionPreInstalled">
+            <summary>Use pre-installed fonts wherever possible.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionDisableBuffer">
+            <summary>Disable transparency backbuffer.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionUseUnicodes">
+            <summary>Use Unicodes instead of GlyphIds.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionDrawPopups">
+            <summary>Draw popup annotations.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionDisableBPC">
+            <summary>Disable black point compensation (BPC).</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionFillStrokes">
+            <summary>Convert line strokes to a filled path.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionDisableAnnots">
+            <summary>Disable the drawing of annotations (including Popups).</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionDisableContent">
+            <summary>Disable the drawing of the page content and draw annotations only.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionEnableOverprint">
+            <summary>Enable the blending of overprinted colorants.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionPrint">
+            <summary>Simulate printing.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionNoBackground">
+            <summary>Don't paint white background.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionPSLevel2">
+            <summary>Use PostScript language level 2 (printing only, default is 3).</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionDisableFilter">
+            <summary>Disable image filtering.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption.eOptionAutoAccurateMode">
+            <summary>Automatically switch to accurate mode if necessary, e.g. to render transparent content.</summary>
+        </member>
+        <member name="T:Pdftools.Render.PDFRendererOption2">
+            <summary>
+            Rendering Options2. Optons for the rendering engine R2 only.
+            </summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption2.eOptionNoAntialiasing">
+            <summary>Don't anti-aliasing in rasterization.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption2.eOptionNoInterpolation">
+            <summary>Don't use interplation filtering for images.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption2.eOptionNoLowPassFilter">
+            <summary>Don't use low-pass filtering for images.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption2.eOptionNoHinting">
+            <summary>Don't use hinting for glyph rendering.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption2.eOptionPrintingMode">
+            <summary>Render in printing mode.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption2.eOptionNoBPC">
+            <summary>Don't use black point compensation (BPC).</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption2.eOptionFitPaths">
+            <summary>Fit clipping paths to pixel grid.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRendererOption2.eOptionUseBoxFilter">
+            <summary>Use box filter instead of Gauss filter.</summary>
+        </member>
+        <member name="T:Pdftools.Render.PDFRenderingMode">
+            <summary></summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRenderingMode.eModeFast">
+            <summary>
+            Fast Mode, uses Windows GDI API for rendering. Generally faster and creates smaller output/spool files.
+            </summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRenderingMode.eModeAccurate">
+            <summary>Accurate Mode, uses Windows GDI+ API for rendering.</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFRenderingMode.eModeDirect">
+            <summary>Deprecated. Behaves equally as eModeFast. Was used in previous versions for Terminal Servers.</summary>
+        </member>
+        <member name="T:Pdftools.Render.PDFLayoutMode">
+            <summary></summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFLayoutMode.eLayoutPage">
+            <summary>Render a definite number of pages (e.g. a single page).</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFLayoutMode.eLayoutDocument">
+            <summary>Render the whole document (known as continuous page layout)</summary>
+        </member>
+        <member name="T:Pdftools.Render.PDFDuplexOption">
+            <summary></summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFDuplexOption.eDuplexSimplex">
+            <summary>from wingdi.h: DMDUP_SIMPLEX</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFDuplexOption.eDuplexVertical">
+            <summary>from wingdi.h: DMDUP_VERTICAL</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFDuplexOption.eDuplexHorizontal">
+            <summary>from wingdi.h: DMDUP_HORIZONTAL</summary>
+        </member>
+        <member name="T:Pdftools.Render.PDFCollateOption">
+            <summary></summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFCollateOption.eCollateFalse">
+            <summary>from wingdi.h: DMCOLLATE_FALSE</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFCollateOption.eCollateTrue">
+            <summary>from wingdi.h: DMCOLLATE_TRUE</summary>
+        </member>
+        <member name="T:Pdftools.Render.PDFColorOption">
+            <summary></summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFColorOption.eColorMonochrome">
+            <summary>from wingdi.h: DMCOLOR_MONOCHROME</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFColorOption.eColorColor">
+            <summary>from wingdi.h: DMCOLOR_COLOR</summary>
+        </member>
+        <member name="T:Pdftools.Render.PDFQualityOption">
+            <summary>
+            Values in ascending order: draft, low, medium, high.
+            </summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFQualityOption.eQualityDraft">
+            <summary>from wingdi.h: DMRES_DRAFT</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFQualityOption.eQualityLow">
+            <summary>from wingdi.h: DMRES_LOW</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFQualityOption.eQualityMedium">
+            <summary>from wingdi.h: DMRES_MEDIUM</summary>
+        </member>
+        <member name="F:Pdftools.Render.PDFQualityOption.eQualityHigh">
+            <summary>from wingdi.h: DMRES_HIGH</summary>
+        </member>
+    </members>
+</doc>

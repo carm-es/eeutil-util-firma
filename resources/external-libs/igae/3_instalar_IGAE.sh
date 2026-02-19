@@ -1,0 +1,2 @@
+#mvn install:install-file -Dfile=./libs/3/vistaDocumentoIGAE-3.0.23.jar -DgroupId=es.igae -DartifactId=vistaDocumentoIGAE -Dversion=3.0.23 -Dpackaging=jar
+mvn install:install-file -Dfile=./libs/3/vistaDocumentoIGAE-3.4.jar -DgroupId=es.igae -DartifactId=vistaDocumentoIGAE -Dversion=3.4 -Dpackaging=jar

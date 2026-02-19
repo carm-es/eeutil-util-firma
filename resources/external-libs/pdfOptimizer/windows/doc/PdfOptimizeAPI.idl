@@ -1,0 +1,146 @@
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+import "pdfsecuritydecl.h";
+import "pdfcodecdecl.h";
+import "pdfoptimizedecl.h";
+import "pdfrasterizerdecl.h";
+
+[
+    uuid(E54CEB25-8777-471E-929B-6AD6B540E7C3),
+    version(1.0),
+    helpstring("3-Heights(TM) PDF Optimizer API 1.60")
+]
+library PDFOPTIMIZEAPILib
+{
+    importlib("stdole32.tlb");
+    importlib("stdole2.tlb");
+
+    import "pdferror.h";
+
+    [
+        object,
+        uuid(F3232F5A-42B6-4A89-BCFC-55CDC1575241),
+        dual,
+        helpstring("IPDFOptimizer Interface"),
+        pointer_default(unique)
+    ]
+    interface IPDFOptimizer : IDispatch
+    {
+        [id(1), helpstring("Open the input PDF file.")] HRESULT Open(BSTR bstrPath, [in, defaultvalue("")] BSTR bstrPassword, [out, retval] VARIANT_BOOL* pDone);
+        [id(2), helpstring("Close input file.")] HRESULT Close([out, retval] VARIANT_BOOL* pDone);
+        [id(3), helpstring("Create the output PDF file and optimize while saving.")] HRESULT SaveAs(BSTR bstrPath, [in, defaultvalue("")] BSTR bstrUserPw, [in, defaultvalue("")] BSTR bstrOwnerPw, [defaultvalue(-1)] long iPermissionFlags, [out, retval] VARIANT_BOOL* pDone);
+        [propget, id(5), hidden] HRESULT BitonalCompression([out, retval] TPDFCompression *pVal);
+        [propput, id(5), hidden] HRESULT BitonalCompression([in] TPDFCompression newVal);
+        [propget, id(6), hidden] HRESULT MonochromeCompression([out, retval] TPDFCompression *pVal);
+        [propput, id(6), hidden] HRESULT MonochromeCompression([in] TPDFCompression newVal);
+        [propget, id(7), hidden] HRESULT ColorCompression([out, retval] TPDFCompression *pVal);
+        [propput, id(7), hidden] HRESULT ColorCompression([in] TPDFCompression newVal);
+        [propget, id(8), helpstring("Get the resolution in DPI after resampling.")] HRESULT ResolutionDPI([out, retval] float *pVal);
+        [propput, id(8), helpstring("Set the resolution in DPI after resampling.")] HRESULT ResolutionDPI([in] float newVal);
+        [propget, id(9), helpstring("Get the threshold in DPI to selectively activate resampling.")] HRESULT ThresholdDPI([out, retval] float *pVal);
+        [propput, id(9), helpstring("Set the threshold in DPI to selectively activate resampling.")] HRESULT ThresholdDPI([in] float newVal);
+        [propget, id(10), helpstring("Get the color conversion.")] HRESULT ColorConversion([out, retval] TPDFColorConversion *pVal);
+        [propput, id(10), helpstring("Set the color conversion.")] HRESULT ColorConversion([in] TPDFColorConversion newVal);
+        [propget, id(11), hidden] HRESULT CompressionQuality([out, retval] short *pVal);
+        [propput, id(11), hidden] HRESULT CompressionQuality([in] short newVal);
+        [propget, id(12), helpstring("Get the switch to extract the images.")] HRESULT ExtractImages([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(12), helpstring("Set the switch to extract the images.")] HRESULT ExtractImages([in] VARIANT_BOOL newVal);
+        [propget, id(15), helpstring("Get the switch to extract the fonts.")] HRESULT ExtractFonts([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(15), helpstring("Set the switch to extract the fonts.")] HRESULT ExtractFonts([in] VARIANT_BOOL newVal);
+        [propget, id(16), helpstring("Get the switch to remove redundant objects.")] HRESULT RemoveRedundantObjects([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(16), helpstring("Set the switch to remove redundant objects.")] HRESULT RemoveRedundantObjects([in] VARIANT_BOOL newVal);
+        [propget, id(17), helpstring("Get the switch to linearize the output.")] HRESULT Linearize([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(17), helpstring("Set the switch to linearize the output.")] HRESULT Linearize([in] VARIANT_BOOL newVal);
+        [propget, id(18), helpstring("Get the strip modes.")] HRESULT Strip([out, retval] long *pVal);
+        [propput, id(18), helpstring("Set the strip modes.")] HRESULT Strip([in] long newVal);
+        [propput, id(19), hidden] HRESULT _Permission([in] TPDFPermission newVal);
+        [propput, id(20), hidden] HRESULT _FontType([in] TPDFFontType newVal);
+        [propput, id(21), hidden] HRESULT _StripType([in] TPDFStripType newVal);
+        [id(22), helpstring("Rename font name.")] HRESULT RenameFont(BSTR bstrFontName1, BSTR bstrFontName2, [out, retval] VARIANT_BOOL* pDone);
+        [propget, id(23), helpstring("Get the DPI value to which Color images will be downsampled")] HRESULT ColorResolutionDPI([out, retval] float *pVal);
+        [propput, id(23), helpstring("Set the resolution in DPI to which Color images shall be downsampled")] HRESULT ColorResolutionDPI([in] float newVal);
+        [propget, id(24), helpstring("Get the DPI value to which Bitonal images will be downsampled")] HRESULT BitonalResolutionDPI([out, retval] float *pVal);
+        [propput, id(24), helpstring("Set the resolution in DPI to which Bitonal images shall be downsampled")] HRESULT BitonalResolutionDPI([in] float newVal);
+        [propget, id(25), helpstring("Get the DPI value to which Monochrome images will be downsampled")] HRESULT MonochromeResolutionDPI([out, retval] float *pVal);
+        [propput, id(25), helpstring("Set the resolution in DPI to which Monochrome images shall be downsampled")] HRESULT MonochromeResolutionDPI([in] float newVal);
+        [propget, id(26), helpstring("Get the active threshold value for color images")] HRESULT ColorThresholdDPI([out, retval] float *pVal);
+        [propput, id(26), helpstring("Set a threshold DPI value; only Color images with DPIs exceeding this value will be downsampled")] HRESULT ColorThresholdDPI([in] float newVal);
+        [propget, id(27), helpstring("Get the active threshold value for Bitonal images")] HRESULT BitonalThresholdDPI([out, retval] float *pVal);
+        [propput, id(27), helpstring("Set a threshold DPI value; only Bitonal images with DPIs exceeding this value will be downsampled")] HRESULT BitonalThresholdDPI([in] float newVal);
+        [propget, id(28), helpstring("Get the active threshold value for Monochrome images")] HRESULT MonochromeThresholdDPI([out, retval] float *pVal);
+        [propput, id(28), helpstring("Set a threshold DPI value; only Monochrome images with DPIs exceeding this value will be downsampled")] HRESULT MonochromeThresholdDPI([in] float newVal);
+        [id(29), helpstring("Save the list of images to a file")] HRESULT ListImages(BSTR bstrFileName, [out, retval] VARIANT_BOOL *pDone);
+        [id(30), helpstring("Save the list of fonts to a file")] HRESULT ListFonts(BSTR bstrFileName, [out, retval] VARIANT_BOOL *pDone);
+        [id(31), helpstring("Open PDF from memory.")] HRESULT OpenMem(VARIANT* varMem, [in, defaultvalue("")] BSTR bstrPassword, [out, retval] VARIANT_BOOL* bDone);	
+        [id(32), helpstring("Save the output file to memory.")] HRESULT SaveInMemory([out, retval] VARIANT_BOOL* bDone);
+        [id(33), helpstring("Get the output file from memory.")] HRESULT GetPdf([out, retval] VARIANT* pVal);
+        [propget, id(34), helpstring("Subset fonts.")] HRESULT SubsetFonts([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(34), helpstring("Subset fonts.")] HRESULT SubsetFonts([in] VARIANT_BOOL newVal);
+        [propget, id(35), helpstring("Optimize resources.")] HRESULT OptimizeResources([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(35), helpstring("Optimize resources.")] HRESULT OptimizeResources([in] VARIANT_BOOL newVal);
+        [propget, id(36), helpstring("Get the error code of the last operation.")] HRESULT ErrorCode([out, retval] TPDFErrorCode *pVal);
+        [propget, id(37), helpstring("Get remove standard fonts property")] HRESULT RemoveStandardFonts([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(37), helpstring("Set remove standard fonts property")] HRESULT RemoveStandardFonts([in] VARIANT_BOOL newVal);
+        [propget, id(38), hidden] HRESULT RemoveNonSymbolicFonts([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(38), hidden] HRESULT RemoveNonSymbolicFonts([in] VARIANT_BOOL newVal);
+        [propget, id(39), helpstring("Get the page count of the input file.")] HRESULT PageCount([out, retval] long *pVal);
+        [id(40), helpstring("Sets the file version if it is not higher")] HRESULT SetVersion(BSTR bstrVersion, [out,retval] VARIANT_BOOL* pDone);
+        [propget, id(41), helpstring("Get the quality (0..100) of the lossy compression.")] HRESULT ImageQuality([out, retval] short *pVal);
+        [propput, id(41), helpstring("Set the quality (0..100) of the lossy compression.")] HRESULT ImageQuality([in] short newVal);
+        [id(42), helpstring("Linearize a file")] HRESULT LinearizeFile([in] BSTR bstrInFileName, [in] BSTR bstrPassword, [in] BSTR bstrOutFileName, [in] BSTR bstrUserPw, [in] BSTR bstrOwnerPw, [in] LONG iPermissionFlags, [out,retval] VARIANT_BOOL* pDone);
+        [id(43), helpstring("Set the license key")] HRESULT SetLicenseKey([in] BSTR bstrLicenseKey, [out,retval] VARIANT_BOOL* pValid);
+        [propget, id(44), helpstring("Check if the license is valid")] HRESULT LicenseIsValid([out,retval] VARIANT_BOOL* pValid);
+        [propget, id(45), helpstring("Force recompression of images.")] HRESULT ForceRecompression([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(45), helpstring("Force recompression of images.")] HRESULT ForceRecompression([in] VARIANT_BOOL newVal);
+        [propget, id(46), helpstring("Get the switch to compress Type1 fonts to CFF.")] HRESULT ConvertToCFF([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(46), helpstring("Set the switch to compress Type1 fonts to CFF.")] HRESULT ConvertToCFF([in] VARIANT_BOOL newVal);
+        [propget, id(47), helpstring("Merge embedded fonts.")] HRESULT MergeEmbeddedFonts([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(47), helpstring("Merge embedded fonts.")] HRESULT MergeEmbeddedFonts([in] VARIANT_BOOL newVal);
+        [id(48), helpstring("Set entry in Info Object and XMP Metadata")] HRESULT SetInfoEntry([in] BSTR sKey, [in] BSTR newVal, [out, retval] VARIANT_BOOL *pDone);
+        [propget, id(49), helpstring("Get the compression types for bitonal images.")] HRESULT BitonalCompressions([out, retval] int *pVal);
+        [propput, id(49), helpstring("Set the compression types for bitonal images.")] HRESULT BitonalCompressions([in] int newVal);
+        [propget, id(50), helpstring("Get the compression types for continuous (color and monochrome) images.")] HRESULT ContinuousCompressions([out, retval] int *pVal);
+        [propput, id(50), helpstring("Set the compression types for continuous (color and monochrome) images.")] HRESULT ContinuousCompressions([in] int newVal);
+        [propget, id(51), helpstring("Get the compression types for indexed images.")] HRESULT IndexedCompressions([out, retval] int *pVal);
+        [propput, id(51), helpstring("Set the compression types for indexed images.")] HRESULT IndexedCompressions([in] int newVal);
+        [propget, id(52), hidden] HRESULT ImageStratConserv([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(52), hidden] HRESULT ImageStratConserv([in] VARIANT_BOOL newVal);
+        [propget, id(53), helpstring("Get the compression type for MRC masks.")] HRESULT MrcMaskCompression([out, retval] TPDFCompression *pVal);
+        [propput, id(53), helpstring("Set the compression type for MRC masks.")] HRESULT MrcMaskCompression([in] TPDFCompression newVal);
+        [propget, id(54), helpstring("Get the compression type for MRC Layers.")] HRESULT MrcLayerCompression([out, retval] TPDFCompression *pVal);
+        [propput, id(54), helpstring("Set the compression type for MRC Layers.")] HRESULT MrcLayerCompression([in] TPDFCompression newVal);
+        [propget, id(55), helpstring("Get the compression type for MRC foreground images.")] HRESULT MrcPictCompression([out, retval] TPDFCompression *pVal);
+        [propput, id(55), helpstring("Set the compression type for MRC foreground images.")] HRESULT MrcPictCompression([in] TPDFCompression newVal);
+        [propget, id(56), helpstring("Get the quality (0..100) of the lossy compression for MRC layers.")] HRESULT MrcLayerQuality([out, retval] short *pVal);
+        [propput, id(56), helpstring("Set the quality (0..100) of the lossy compression for MRC layers.")] HRESULT MrcLayerQuality([in] short newVal);
+        [propget, id(57), helpstring("Get the resolution in DPI after resampling for MRC layers.")] HRESULT MrcLayerResolutionDPI([out, retval] float *pVal);
+        [propput, id(57), helpstring("Set the resolution in DPI after resampling for MRC layers.")] HRESULT MrcLayerResolutionDPI([in] float newVal);
+        [propget, id(58), helpstring("Get the option to clip invisible parts of images.")] HRESULT ClipImages([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(58), helpstring("Set the option to clip invisible parts of images.")] HRESULT ClipImages([in] VARIANT_BOOL newVal);
+        [propget, id(59), helpstring("Get the option to force image compression types to those set with [Bitonal|Continuous|Indexed]Compressions.")] HRESULT ForceCompressionTypes([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(59), helpstring("Set the option to force image compression types to those set with [Bitonal|Continuous|Indexed]Compressions.")] HRESULT ForceCompressionTypes([in] VARIANT_BOOL newVal);
+        [propget, id(60), helpstring("Get the dithering mode for down-sampling bitonal images.")] HRESULT DitheringMode([out, retval] TPDFDitheringMode *pVal);
+        [propput, id(60), helpstring("Set the dithering mode for down-sampling bitonal images.")] HRESULT DitheringMode([in] TPDFDitheringMode newVal);
+        [id(61), helpstring("Set the name of the CMS engine (None, Neugebauer, MSICM, lcms)")] HRESULT SetCMSEngine(BSTR bstrCMSEngine, [out, retval] VARIANT_BOOL* pDone);
+        [propput, id(62), helpstring("Set the optimization profile")] HRESULT Profile([in] TPDFOptimizationProfile newVal);
+        [propget, id(63), helpstring("Get the option to recognize areas of photographic pictures when doing MRC.")] HRESULT MrcRecognizePictures([out, retval] VARIANT_BOOL *pVAL);
+        [propput, id(63), helpstring("Set the option to recognize areas of photographic pictures when doing MRC.")] HRESULT MrcRecognizePictures([in] VARIANT_BOOL newVal);
+        [id(64), helpstring("Remove embedded font program.")] HRESULT UnembedFont(BSTR bstrFontName, [out, retval] VARIANT_BOOL* pDone);
+        [propget, id(65), helpstring("Get the version number of the product.")] HRESULT ProductVersion([out, retval] BSTR *pVal);
+        [propget, id(66), helpstring("Get the option to reduce the color complexity of images.")] HRESULT ReduceColorComplexity([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(66), helpstring("Set the option to reduce the color complexity of images.")] HRESULT ReduceColorComplexity([in] VARIANT_BOOL newVal);
+        [propget, id(67), helpstring("Get the option to flatten appearances of signature fields.")] HRESULT FlattenSignatureFields([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(67), helpstring("Set the option to flatten appearances of signature fields.")] HRESULT FlattenSignatureFields([in] VARIANT_BOOL newVal);
+    };
+
+    [
+        uuid(E42B90DA-30CE-4187-9974-BC9B44D39147),
+        helpstring("PDFOptimizer Class")
+    ]
+    coclass PDFOptimizer
+    {
+        [default] interface IPDFOptimizer;
+    };
+};
