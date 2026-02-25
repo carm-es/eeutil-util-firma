@@ -1,0 +1,759 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PdfOptimizeNET</name>
+    </assembly>
+    <members>
+        <member name="T:Pdftools.PdfOptimize.Optimizer">
+             <summary>
+             Base class for pdf optimizing.
+            
+             </summary>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.#ctor">
+            <summary>simple constructor</summary>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.#ctor(System.IntPtr)">
+            <summary>internal constructor</summary>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.Finalize">
+            <summary>simple finalizer</summary>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.Dispose">
+            <summary>
+            Destroy the internal representation of the object.
+            After disposing, the object should not be used anymore.
+            </summary>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.SetLicenseKey(System.String)">
+             <summary>
+             Set the license key.
+            
+             </summary>
+            
+             <param name="licenseKey">
+             The license key
+             </param>
+            
+             <returns>True if the license is valid.</returns>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.GetLicenseIsValid">
+             <summary>
+             </summary>
+            
+             <returns></returns>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.Close">
+             <summary>
+             Closes the currently open input file(s).
+            
+             If the document is already closed the method does nothing.
+            
+             </summary>
+            
+             <returns>True: The file could be closed successfully. False otherwise.</returns>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.GetPdf">
+             <summary>
+             Returns the output file previously stored in memory.
+            
+             See also method SaveInMemory.
+             In certain programming languages, such as Visual Basic 6, the type of the byte array must explicitly be Variant.
+            
+             </summary>
+            
+             <returns>A byte array containing the PDF document.</returns>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.ListFonts(System.String)">
+             <summary>
+             This method lists all fonts included in the document and writes them as a list to a text file.
+            
+             </summary>
+            
+             <param name="fileName">
+             The file name of the output text file, to which the information should be stored.
+             The list contains the header line: &quot;FontName, FontType, Encoding, IsCID, IsEmbedded, IsSubsetted, Filename&quot;.
+             
+             The meanings of these columns are:
+             
+             FontName: The name of the font, such as Arial-BoldMT or TimesNewRomanPS-BoldMT.
+             FontType: The font type, such as TrueType or Type1.
+             Encoding: The encoding of the font, such as WinAnsiEncoding or MacRomanEncoding.
+             IsCID: The font is CID (character identifier) keyed. This value is either CID or Non-CID.
+             IsEmbedded: The font program for this font is embedded in the PDF document. This value is either Embedded or Non-Embedded.
+             FileName: The file name of the font program. This is the name under which the font is saved to file in case the font is extracted and saved. Only embedded fonts can be extracted. The file name consists of the prefix fnt, the object number and the file type which is one of .ttf, .pfb or .cff. Example: fnt38.ttf
+            
+             </param>
+            
+             <returns>True: The font information was successfully extracted and written to the output text file. False otherwise.</returns>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.ListImages(System.String)">
+             <summary>
+             This method lists all images included in the document and writes them as a list to a text file.
+            
+             </summary>
+            
+             <param name="fileName">
+             The file name of the output text file, to which the information should be stored.
+             The list contains the header line: &quot;PageNumber, ObjectNumber, Width, Height, BitsPerComponent, ColorSpace, Resolution, Filter, ImageSize, CompressedSize, CompressionRatio, FileName&quot;.
+             
+             The meanings of these columns are:
+             
+             PageNumber: The page number in the PDF on which the image occurs.
+             ObjectNumber: The PDF object number which contains this image.
+             Width: The width of the image in dots (pixels).
+             Height: The height of the image in dots (pixels).
+             BitsPerComponent: The amount of bits that are used per component. This value is for example 1 for bi-tonal images and 8 for gray-scale and color images.
+             ColorSpace: The color space can be one of DeviceGray, DeviceRGB, DeviceCMYK, ICCBased, Indexed.
+             Resolution: The ratio of amount of pixels divided by the length of the image on the page. Example: An image is 300 dots (pixel) wide and takes 1 inch (2.54cm) on the page in the PDF. This image has a resolution of 300 dpi (dots per inch). If the same image is stretched to 2 inches, its resolution is 150 dpi.
+             Filter: The compression filter, for example: FlateDecode, DCTDecode, CCITTFaxDecode.
+             ImageSize: The size in bytes of the uncompressed image.
+             CompressedSize: The size in bytes of the compressed image.
+             CompressionRatio: The ratio compressed size divided by uncompressed size.
+             FileName: The file name of the image. This is the name under which the image is saved to file in case the image is extracted and saved. The file name consists of the prefix img, followed by the PDF object number, and the extension which is one of .jpg or .tif, depending on the extracted image type. Example: img19.jpg, img21.tif.
+            
+             </param>
+            
+             <returns>True: The image information was successfully extracted and written to the output text file. False otherwise.</returns>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.Open(System.String,System.String)">
+             <summary>
+             Opens an input PDF file.
+            
+             It makes the objects contained in the PDF document accessible. If the document is already open, it is closed first.
+            
+             </summary>
+            
+             <param name="fileName">
+             The PDF input file name and optionally the file path, drive or server string according to the operating systems file name specification rules.
+            
+             </param>
+             <param name="password">
+             The user or the owner password of the encrypted input PDF document.
+             If this parameter is left out, null or an empty string the default (no password) is used.
+            
+             </param>
+            
+             <returns>True: The file could successfully be opened. False: The file does not exists, it is corrupt, or the password is not valid. Use the property ErrorCode for additional information.</returns>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.OpenMem(System.Byte[],System.String)">
+             <summary>
+             Opens an input PDF memory block.
+            
+             It makes the objects contained in the PDF document accessible. If the document is already open it is closed first.
+            
+             </summary>
+            
+             <param name="varMem">
+             Memory block containing the file as one dimensional byte array.
+            
+             </param>
+             <param name="password">
+             The user or the owner password of the encrypted input PDF document.
+             If this parameter is left out, null or an empty string the default (no password) is used.
+            
+             </param>
+            
+             <returns>True: The file could successfully be opened. False: The file does not exists, it is corrupt, or the password is not valid.</returns>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.RenameFont(System.String,System.String)">
+             <summary>
+             Deprecated.
+            
+             </summary>
+            
+             <param name="fontName1">
+             Name of the font to replace.
+             </param>
+             <param name="fontName2">
+             The new font name.
+             </param>
+            
+             <returns>True: The font name could successfully be replaced. False: The font name could not be replaced.</returns>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.UnembedFont(System.String)">
+             <summary>
+             Remove embedded font program.
+            
+             The font program (font file) of all fonts named as given in the FontName is removed.
+             Warning: The output document may not display correctly on certain systems.
+            
+             </summary>
+            
+             <param name="fontName">
+             Name of the font
+             </param>
+            
+             <returns></returns>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.SaveAs(System.String,System.String,System.String,Pdftools.Pdf.PDFPermission)">
+             <summary>
+             Create an output PDF document and store the optimized input file.
+            
+             To not encrypt the output document, use PermNoEncryption or –1 and no user and owner password.
+             In order to allow high quality printing, the flags PermPrint and PermDigitalPrint need to be set.
+            
+             </summary>
+            
+             <param name="fileName">
+             The PDF output file name and optionally the file path, drive or server string according to the operating systems file name specification rules.
+            
+             </param>
+             <param name="userPwd">
+             Set the user password of the PDF document.
+             If this parameter is left out, null or an empty string the default (no password) is used.
+            
+             </param>
+             <param name="ownerPwd">
+             Set the owner password of the PDF document.
+             If this parameter is left out, null or an empty string the default (no password) is used.
+            
+             </param>
+             <param name="permissionFlags">
+             Permissions to set for encrypted PDF files.
+             By default no encryption is used (-1). The permissions that can be granted are listed at the enumeration Pdftools.Pdf.PDFPermission.
+            
+             </param>
+            
+             <returns>True: The opened document could successfully be saved to file. False: The output file cannot be created, it is recommended to abort the processing of the file and log the error code and error message.</returns>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.SaveInMemory">
+             <summary>
+             Save the output PDF in memory.
+            
+             After the Close() call it can be accessed using the method GetPdf().
+            
+             </summary>
+            
+             <returns>True: The PDF data could be saved in memory. False otherwise.</returns>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.SetCMSEngine(System.String)">
+             <summary>
+             Set the Color Management System (CMS) Engine.
+            
+             The following strings are supported:
+             * &quot;None&quot;: No CMS is applied. This results in the maximum possible contrast.
+             * &quot;Neugebauer&quot;: The Neugebauer algorithm efficiently converts CMYK to RGB. It does not need any color profiles. The results however look similar to conversion using color profiles.
+             * &quot;lcms&quot;: (default): Use ICC color profiles. Default profiles are used for all unmanaged device color spaces.
+             *  FileName: Providing a file name, a configurable version of the Neugebauer algorithm is applied. The coefficients can be defined in the text file. The default Neugebauer coefficients are listed below (Red, Green, Blue ; Color):
+             0.996078, 0.996078, 0.996078 ; White
+             0.000000, 0.686275, 0.937255 ; C
+             0.925490, 0.149020, 0.560784 ; M
+             1.000000, 0.949020, 0.066667 ; Y
+             0.215686, 0.203922, 0.207843 ; K
+             0.243137, 0.247059, 0.584314 ; CM
+             0.000000, 0.658824, 0.349020 ; CY
+             0.066667, 0.176471, 0.215686 ; CK
+             0.929412, 0.196078, 0.215686 ; MY
+             0.215686, 0.101961, 0.141176 ; MK
+             0.200000, 0.196078, 0.125490 ; YK
+             0.266667, 0.266667, 0.274510 ; CMY
+             0.133333, 0.098039, 0.160784 ; CMK
+             0.074510, 0.180392, 0.133333 ; CYK
+             0.215686, 0.121569, 0.113725 ; MYK
+             0.125490, 0.121569, 0.121569 ; CMYK
+             The Neugebauer algorithm mixes the colors based on the amount of color and the corresponding weighted coefficient. Altering the values for a pure color specifically changes the result for this pure color. The color transition remains smooth.
+            
+             </summary>
+            
+             <param name="engineName">
+             Name of the CMS Engine
+             </param>
+            
+             <returns>True: The CMS engine could be set.</returns>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.SetVersion(System.String)">
+             <summary>
+             Allows to set the minimum PDF version of the created PDF output file. Supported values for the string are &quot;1.1&quot; to &quot;1.7&quot; (PDF 1.4 corresponds to Acrobat 5, PDF 1.5 to Acrobat 6, etc.).
+             There are three parameters that influence the version of the PDF output file:
+             * The value set using the method SetVersion
+             * The PDF version of the input file
+             * Other settings in the optimization (e.g. JBIG2 requires PDF 1.4, JPEG2000 requires PDF 1.5)
+             Examples:
+             1. Input PDF is version 1.5 and the following settings are applied:
+             * SetVersion(&quot;1.4&quot;)
+             The output file is PDF version 1.5.
+             2. Input PDF is version 1.4 or lower and the following settings are applied:
+             * SetVersion(&quot;1.4&quot;)
+             The output file is PDF version 1.4.
+             3. Input PDF is version 1.3 and the following settings are applied:
+             * ContinuousCompressions = eComprAttemptJPEG2000
+             * SetVersion(&quot;1.4&quot;)
+             If the input PDF contains color images to which JPEG2000 compression is applied, the output file will be version 1.5. Otherwise it will be version 1.4.
+            
+             </summary>
+            
+             <param name="version">
+             Version string.
+            
+             </param>
+            
+             <returns>True if Version changed succesfully.</returns>
+        </member>
+        <member name="M:Pdftools.PdfOptimize.Optimizer.SetInfoEntry(System.String,System.String)">
+             <summary>
+             Set the value of an info entry key.
+            
+             </summary>
+            
+             <param name="key">
+             Key such as Creator, Subject, Keywords etc. or custom attributes.
+            
+             </param>
+             <param name="value">
+             The entry&apos;s value.
+            
+             </param>
+            
+             <returns></returns>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.LicenseIsValid">
+             <summary>
+             Check if the license is valid.
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.ProductVersion">
+             <summary>
+             The version of the product.
+            
+             The version of the product in the format &apos;A.B.C.D&apos;.
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.BitonalCompression">
+             <summary>
+             Single compression type for bitonal images.
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.BitonalCompressions">
+             <summary>
+             Compression types for bitonal images.
+            
+             Typically, CCITT G4 or JBIG2 is used for bi-tonal compression. Due to the simpler algorithm CCITT G4 has the advantage of being faster. JBIG2 can achieve compression ratios that are up to twice as high as CCITT G4 at the cost of longer computation time.
+             See also enumeration Pdftools.Pdf.PDFComprAttempt. Several values can be combined with bitwise or operators. The following values are allowed:
+             eComprAttemptRaw,
+             eComprAttemptFlate,
+             eComprAttemptLZW,
+             eComprAttemptGroup3,
+             eComprAttemptGroup4,
+             eComprAttemptSource,
+             eComprAttemptJBIG2.
+             Other values are ignored.
+             Default: eComprGroup4
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.BitonalResolutionDPI">
+             <summary>
+             Resolution in dpi for bitonal images.
+            
+             See also ResolutionDPI.
+             Default: 150
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.BitonalThresholdDPI">
+             <summary>
+             Threshold Resolution in dpi for bitonal images.
+            
+             This property allows selectively activating re-sampling for bitonal images. See also ThresholdDPI.
+             Default: 225
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.ColorCompression">
+             <summary>
+             Single compression type for continuous (color and monochrome) images.
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.ContinuousCompressions">
+             <summary>
+             Compression types for continuous (color and monochrome) images.
+            
+             Get or set the compression types to be tried for continuous images, i.e. RGB, CMYK, and grayscale images.
+             See also Pdftools.Pdf.PDFComprAttempt. Several values can be combined with bitwise or operators. The following values are allowed:
+             eComprAttemptRaw,
+             eComprAttemptJPEG,
+             eComprAttemptFlate,
+             eComprAttemptJPEG2000,
+             eComprAttemptSource,
+             eComprAttemptMRC.
+             Other values are ignored.
+             Default: eComprAttemptJPEG
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.ForceRecompression">
+             <summary>
+             Force image recompression.
+            
+             Always recompress images using the specified image compression and other image parameters. If not set, images are only recompressed if the resulting image is smaller than the original, i.e. requires less bytes to store in the file.
+             Default: false
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.ForceCompressionTypes">
+             <summary>
+             Force image compression types to those set with [Bitonal|Continuous|Indexed]Compressions.
+            
+             Do not allow other image compressions than set, even if the input image has a smaller memory footprint. Use this option if you want to allow only the given compression types for images in the output PDF.
+             Default: false
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.ImageStratConserv">
+             <summary>
+             Conservative strategy for image processing.
+            
+             Only try re-compressing an image if it has either been clipped (ClipImages), re-sampled (ResolutionDPI, ThresholdDPI), or if it has undergone a color conversion (ColorConversion), or if ForceRecompression is enabled.
+             Otherwise the original input image is taken as is.
+             Default: false
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.ColorResolutionDPI">
+             <summary>
+             Resolution in dpi for color images.
+            
+             See also ResolutionDPI.
+             Default: 150
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.ColorThresholdDPI">
+             <summary>
+             Threshold Resolution for color images.
+            
+             This property allows selectively activating re-sampling for color images. See also ThresholdDPI.
+             Default: 225
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.IndexedCompressions">
+             <summary>
+             Compression types for indexed (paletted) images
+            
+             Get or set the compression types for images that have an indexed (&quot;palette&quot;) color space.
+             
+             See also enumeration Pdftools.Pdf.PDFComprAttempt. Several values can be combined with bitwise or operators. The following values are allowed:
+             eComprAttemptRaw,
+             eComprAttemptFlate,
+             eComprAttemptLZW,
+             eComprAttemptSource.
+             
+             Other values are ignored.
+             
+             Default: eComprAttemptFlate
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.ImageQuality">
+             <summary>
+             Quality index for lossy compression (1..100).
+            
+             Can be applied for JPEG and JPEG2000.
+             For JPEG2000, a quality index of 100 means lossless compression.
+             JPEG compression is always lossy.
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.ClipImages">
+             <summary>
+             Clip invisible parts of images.
+            
+             When enabled, then invisible parts of images are clipped (cropped). While this does not affect visual parts of images, it may have a minor visual impact because clipped images are re-compressed. Pre-blended images are not clipped.
+             Enabling this property will also enable the OptimizeResources property.
+             Default: false
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.ColorConversion">
+             <summary>
+             Color conversion to use on color images. Default is None (no conversion).
+            
+             Image can be not converted (eConvNone), converted to RGB (eConvRGB), to CMYK or gray scale. Color key masked images are not color converted. Pre-blended images can be converted from RGB to Grayscale, if the force conversion feature is set.
+             
+             Color conversion is applied before resampling. Therefore converting to grayscale will make the grayscale dpi and threshold dpi the reference values for the orginally colored images.
+             
+             Color conversion is mostly used for specific application areas. E.g. in the printing industry the CMYK color space is used, since it represents the colors that printer devices commonly support. If colors are exclusively used for the monitor, the RGB color space should be used.
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.DitheringMode">
+             <summary>
+             Dithering mode used for down-sampling bitonal images. Default is eDitherNone.
+            
+             A bitonal image is downsampled by first converting the image to grayscale, downsample the grayscale image and then convert back to bitonal. Some bi-tonal images try to evoke the impression of different levels of gray by randomly setting pixels to black. If dithering is applied during down-sampling then the gray levels of such images are preserved better. If dithering is switched off then lines (e.g. text glyphs) are preserved better.
+             This property defines the dithering mode. Currently, only eDitherNone and eDitherFloydSteinberg are supported.
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.ReduceColorComplexity">
+             <summary>
+             Convert images to their least complex color space.
+            
+             Images with device color spaces (DeviceRGB, DeviceGray, or DeviceGray) and indexed images with a device color space as base color space are analyzed and if possible converted as follows:
+             An image with DeviceRGB or DeviceCMYK color space in which all pixels are gray is converted to a grayscale image with DeviceGray color space.
+             An image that contains only black and white pixels is converted into a bitonal image.
+             An image in which all the pixels have the same color is down-sampled to one pixel.
+             Furthermore, images&apos; masks and soft masks are optimized as follows:
+             A soft mask that contains only black and white pixels is converted to a mask.
+             A (soft) mask that is opaque is removed.
+             
+             Default: false.
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.MrcMaskCompression">
+             <summary>
+             Compression type for MRC mask.
+            
+             Default: eComprJPEG
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.MrcLayerCompression">
+             <summary>
+             Compression type for MRC layer.
+            
+             Default: eComprJPEG
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.MrcPictCompression">
+             <summary>
+             Compression type for MRC foreground pictures.
+            
+             Default: eComprJPEG
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.MrcLayerQuality">
+             <summary>
+             Image quality for MRC foreground and background layers when using a lossy compression type.
+            
+             This is a value between 0 and 100.
+             Default: 10
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.MrcLayerResolutionDPI">
+             <summary>
+             Target resolution in DPI for down-sampling MRC foreground and background layers.
+            
+             If set to -1 then no down-sampling is performed.
+             Default: 70
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.MrcRecognizePictures">
+             <summary>
+             Option to recognize areas of photographic pictures when doing MRC.
+            
+             Default: false
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.ExtractFonts">
+             <summary>
+             Extract embedded fonts.
+            
+             Depending on the font type, the extracted font has one of the following three formats:
+             fnt&lt;objno&gt;.ttf or fnt&lt;objno&gt;.pfb or fnt&lt;objno&gt;.cff, where objno is the number of the PDF object of the font.
+             Default: false
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.ExtractImages">
+             <summary>
+             Extract images.
+            
+             Depending on the compression, the extracted image has one of the following formats:
+             img&lt;objno&gt;.tif or img&lt;objno&gt;.jpg, where objno is the number of the PDF object of the image.
+             Default: false
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.Linearize">
+             <summary>
+             Linearize the PDF output file for fast web access.
+            
+             A linearized document has a slightly larger file size than a non-linearized file and provides the following main features:
+             * When a document is opened in a PDF viewer of a web browser, the first page can be viewed without downloading the entire PDF file. In contrast, a non-linearized PDF file must be downloaded completely before the first page can be displayed.
+             * When another page is requested by the user, that page is displayed as quickly as possible and incrementally as data arrives, without downloading the entire PDF file.
+             Default: false
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.Profile">
+             <summary>
+             Set an optimization profile
+            
+             Setting an optimization profile implicitly sets many of the optimizer&apos;s properties.
+             Please refer to the manual for the exact settings.
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.MonochromeCompression">
+             <summary>
+             Single compression type for continuous (monochrome and color) images.
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.MonochromeResolutionDPI">
+             <summary>
+             Resolution in dpi for monochrome images.
+            
+             See also ResolutionDPI.
+             Default: 150
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.MonochromeThresholdDPI">
+             <summary>
+             Threshold Resolution for monochrome images.
+            
+             This property allows selectively activating re-sampling for color images. See also ThresholdDPI.
+             
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.RemoveRedundantObjects">
+             <summary>
+             If true duplicate entries will be removed.
+            
+             If this property is set to true, duplicate objects are removed in order to reduce the file size.
+             Default: false
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.OptimizeResources">
+             <summary>
+             If true unreferenced resources are stripped.
+            
+             If set, unused resources such as images, fonts, and color spaces are removed. Also content streams are re-built.
+             Default: false
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.ResolutionDPI">
+             <summary>
+             Target resolution in dpi for resampling.
+            
+             Convenience property to set all resolution dpi properties at once. Returns the target resolution in dpi for color images.
+             Typical resolution when optimizing for the web is 150 dpi.
+             For printing typically no re-sampling is applied (see property ThresholdDPI). Pre-blended images, images with a color key mask, mask, and soft mask images are not re-sampled.
+             Default: 150
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.Strip">
+             <summary>
+             Get or set the stripping mode.
+            
+             This mode can be configured to remove unneeded data of a PDF document such as Threads, Metadata, the PieceInfo, the StructTreeRoot entry, embedded Thumbs and the SpiderInfo entry.
+             Several values of Pdftools.Pdf.PDFStripType can be combined with the bitwise or operator.
+             Default: 0
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.FlattenSignatureFields">
+             <summary>
+             If true then appearances of signature fields are flattened.
+            
+             A signature in a PDF consist of two parts:
+             (a) The invisible digital signature in the PDF.
+             (b) The visual appearance that was attributed to the signature.
+             Part (a) can be used by a viewing application, to verify that a document has not changed since it has been signed and report this to the user.
+             
+             When optimizing a PDF, the PDF is altered and hence the digital signature is broken.
+             Therefore, the 3-Heights(TM) PDF Optimization API removes all signatures, including parts (a) and (b).
+             
+             When the property FlattenSignatureFields is set to true, then digital signatures (parts (a)) are still removed, but their visual appearances (parts (b)) are flattened.
+             I.e. they are retained and drawn as non-editable graphic onto the page.
+             
+             Note that the resulting PDF can be misleading as it visually appears to be signed, but it has no digital signature and hence, a viewer application does not report any broken signature.
+             In most cases, such a behavior is undesirable.
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.SubsetFonts">
+             <summary>
+             Subset embedded fonts and merge embedded font programs of different subsets of the same font, granted they can be merged.
+            
+             Subsetting refers to removing those glyphs in a font that are not actually used in any text contained in the PDF.
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.MergeEmbeddedFonts">
+             <summary>
+             Merge embedded font programs.
+            
+             Merge all embedded fonts that originate from the same font.
+             Font programs can be merged if they originate from the same font, e.g. they are of the same type, have the same name and encoding. Merging of Type1 (PostScript) and TrueType fonts is supported.
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.ThresholdDPI">
+             <summary>
+             Set the threshold in DPI to selectively activate re-sampling.
+            
+             Only images with a resolution above the threshold DPI will be re-sampled.
+             The typical value for the threshold when optimizing for the web is 225 dpi (default).
+             This property affects all three image compression types (bi-tonal, monochrome, color). Set to -1 to deactivate re-sampling.
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.RemoveStandardFonts">
+             <summary>
+             Remove standard fonts.
+            
+             Get or set whether to remove the font programs of all embedded standard fonts, such as Arial, Courier, CourierNew, Helvetica, Symbol, Times, TimesNewRoman and ZapfDingbats. (A complete list is given in the manual pola.pdf.)
+             The fonts are re-placed with one of the 14 PDF Standard Fonts, all of which have no associated font program. Un-embedding a font decreases the file size.
+             
+             A PDF Viewer must be able to display these 14 PDF Standard Fonts correctly. Therefore enabling this property usually should not visually alter the PDF when it is displayed.
+             
+             Un-embedding the font works based on the font&apos;s Unicode information. I.e. the un-embedded font&apos;s characters are mapped to those of the original font with the same Unicode. Therefore, only fonts with Unicode information will be un-embedded by the 3-Heights™ PDF Optimization API.
+             However, if a font&apos;s Unicode information is not correct, un-embedding may lead to visual differences. Whether or not a font&apos;s Unicode information is correct can be verified by extracting text that uses the font. Suitable tools for this purpose are for instance the 3-Heights™ PDF Extract Tool or an interactive PDF viewer.
+             If the extracted text is meaningful, the font&apos;s Unicode information is correct and unembedding of the font will not lead to visual differences.
+             
+             Default: false
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.RemoveNonSymbolicFonts">
+             <summary>
+             Deprecated.
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.ConvertToCFF">
+             <summary>
+             Convert embedded Type1 (PostScript) fonts to Type1C (Compact Font Format).
+            
+             This reduces the file size.
+             Default: false
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.PageCount">
+             <summary>
+             Number of pages in the PDF document.
+            
+             If no document is open/selected, 0 (for undefined) is returned.
+            
+             </summary>
+        </member>
+        <member name="P:Pdftools.PdfOptimize.Optimizer.ErrorCode">
+             <summary>
+             Contains the latest error code.
+            
+             See Pdftools.Pdf.PDFErrorCode
+            
+             </summary>
+        </member>
+    </members>
+</doc>

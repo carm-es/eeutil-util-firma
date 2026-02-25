@@ -1,0 +1,3 @@
+mvn install:install-file -Dfile=./libs/2/jodconverter-2.2.2.jar -DgroupId=com.artofsolving -DartifactId=jodconverter -Dversion=2.2.2 -Dpackaging=jar
+mvn install:install-file -Dfile=./libs/2/jodconverter-cli-2.2.2.jar -DgroupId=com.artofsolving -DartifactId=jodconverter-cli -Dversion=2.2.2 -Dpackaging=jar
+mvn install:install-file -Dfile=./libs/2/jodconverter-core-3.0-beta-4-jahia2.jar -DgroupId=com.artofsolving -DartifactId=jodconverter-core -Dversion=3.0-beta-4-jahia2 -Dpackaging=jar

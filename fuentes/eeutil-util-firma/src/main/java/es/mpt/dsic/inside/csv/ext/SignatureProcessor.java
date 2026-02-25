@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.csv.ext;
@@ -19,6 +19,8 @@ import java.io.InputStream;
 import java.util.Vector;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
@@ -29,35 +31,42 @@ import es.gob.afirma.core.AOUnsupportedSignFormatException;
 import es.gob.afirma.core.misc.MimeHelper;
 import es.gob.afirma.core.signers.AOSignInfo;
 import es.gob.afirma.core.signers.AOSigner;
-import es.gob.afirma.core.signers.AOSignerFactory;
 import es.gob.afirma.core.signers.AOSimpleSignInfo;
 import es.gob.afirma.core.util.tree.AOTreeModel;
 import es.gob.afirma.core.util.tree.AOTreeNode;
+import es.gob.afirma.signers.xades.AOXAdESSigner;
+import es.gob.eeutils.compatibilility.afirma.xades.XAdESSigner165Utils;
+import es.mpt.dsic.inside.exception.AfirmaException;
 import es.mpt.dsic.inside.model.InformacionFirmaAfirma;
 import es.mpt.dsic.inside.services.AfirmaService;
 import es.mpt.dsic.inside.util.SignedData;
 import es.mpt.dsic.inside.util.SignedDataExtractor;
+import es.mpt.dsic.inside.utils.exception.EeutilException;
+import es.mpt.dsic.inside.utils.pdf.PdfEncr;
+import es.mpt.dsic.inside.wrapper.AOSignerWrapperEeutils;
 
 @Service
 public class SignatureProcessor {
 
+  protected final static Log logger = LogFactory.getLog(SignatureProcessor.class);
+
   /** Firma que deseamos visualizar. */
-  private byte[] signatureData = null;
+  // private byte[] signatureData = null;
 
   /** Manejador de firma compatible con el objeto de firma analizado. */
-  private AOSigner signer = null;
+  // private AOSigner signer = null;
 
   /** Informaci&oacute;n general obtenida de la firma. */
-  private AOSignInfo signInfo = null;
+  // private AOSignInfo signInfo = null;
 
   /** Informaci&oacute;n de los datos contenidos en la firma. */
-  private AOSignedDataInfo dataInfo = null;
+  // private AOSignedDataInfo dataInfo = null;
 
   /** &Aacute;rbol de firmas. */
-  private AOTreeModel signTree = null;
+  // private AOTreeModel signTree = null;
 
   /* Documento firmado */
-  private byte[] signedDocument = null;
+  // private byte[] signedDocument = null;
 
   @Autowired
   private AfirmaService afirmaService;
@@ -70,27 +79,91 @@ public class SignatureProcessor {
    * @throws AOUnsupportedSignFormatException Cuando el formato de firma no est&aacute; soportado.
    * @throws AOException Cuando ocurre un error al analizar el objeto de firma.
    */
-  public void processSign(byte[] signature, byte[] signedDocument, String idAplicacion)
-      throws AOUnsupportedSignFormatException, AOException, Exception {
+  public void processSign(final byte[] signature, byte[] signedDocument, String idAplicacion)
+      throws AOUnsupportedSignFormatException, EeutilException {
 
-    // Almacenamos la propia firma
-    this.signatureData = signature;
+    try {
 
-    // Comprobaciones de seguridad
-    if (signature == null || signature.length == 0)
-      throw new NullPointerException("No se han introducido datos de firma");
+      AOSigner signer = null;
+      AOSignInfo signInfo = null;
+      AOSignedDataInfo dataInfo = null;
 
-    // Obtenemos un manejador de firma compatible
-    this.signer = AOSignerFactory.getSigner(signature);
+      // Comprobaciones de seguridad
+      if (signature == null || signature.length == 0) {
+        throw new NullPointerException("Signature vacio.No se han introducido datos de firma");
+      }
 
-    if (this.signer == null) {
-      throw new AOUnsupportedSignFormatException(
-          "La firma proporcionada no se corresponde con ning\u00FAn formato reconocido");
+      // esto tiene que ir siempre antes de AOSignerFactory.getSigner
+      if (PdfEncr.isProtectedPdf(signature)) {
+        throw new EeutilException(
+            "Error al processSign. El fichero pdf tiene contrase�a y no se puede procesar");
+      }
+
+      // Obtenemos un manejador de firma compatible
+      signer = new AOSignerWrapperEeutils().wrapperGetSigner(signature);
+
+      if (signer == null) {
+        // traza basura, borrarla
+        // logger.error("La firma proporcionada no se corresponde con ningun formato reconocido");
+        throw new AOUnsupportedSignFormatException(
+            "La firma proporcionada no se corresponde con ningun formato reconocido. Se recogera la excepcion mas adelante");
+      }
+
+      signedDocument = obtenerDocumentoFirmado(signature, signedDocument, idAplicacion);
+
+      // Obtenemos los datos generales de la firma y los datos que se firmaron
+      byte[] signedData = null;
+      try {
+        // signInfo = signer.getSignInfo(signature);
+
+        if (signer instanceof AOXAdESSigner) {
+          signedData = XAdESSigner165Utils.getData(signature);
+        } else {
+          signedData = signer.getData(signature);
+        }
+
+
+
+      } catch (Exception e) {
+        // logger.error("Ocurrio un problema al analizar el objeto de firma", e);
+        throw new AOException(
+            "Ocurrio un problema al analizar el objeto de firma: " + e.getMessage(), e);
+      }
+
+      // Analizamos los datos firmados
+      if (signedData != null) {
+        dataInfo = new AOSignedDataInfo();
+        // this.dataInfo.setDataMimeType(signer.getDataMimeType(signedData));
+        MimeHelper mimeHelper = new MimeHelper(signature);
+        dataInfo.setDataMimeType(mimeHelper.getMimeType());
+        dataInfo.setData(signedData);
+        // this.dataInfo = ViewerUtils.analizeData(signedData);
+      }
+    } catch (AOUnsupportedSignFormatException e) {
+      throw new AOUnsupportedSignFormatException(e.getMessage());
+    } catch (AOException e) {
+      throw new EeutilException(e.getMessage(), e);
+    } catch (Exception e) {
+      throw new EeutilException(e.getMessage(), e);
     }
 
+  }
+
+  /**
+   * Si el documento de la firma es nulo lo calcula sino lo devuelve como tal, es un calculado que
+   * se ha extraido a una funcion con visibilidad package para que CVSSignature lo pueda ver.
+   * 
+   * @param signature firma
+   * @param signedDocument documento de la firma.
+   * @param idAplicacion
+   * @throws Exception
+   * @throws AfirmaException
+   */
+  byte[] obtenerDocumentoFirmado(final byte[] signature, byte[] signedDocument, String idAplicacion)
+      throws AfirmaException, EeutilException {
     // Si el documento firmado es nulo, lo obtenemos de la firma
     if (signedDocument == null) {
-      signedDocument = obtainSignedDocument();
+      signedDocument = obtainSignedDocument(signature);
 
       // obtenemos el documento de la informacion de la firma
       if (signedDocument == null) {
@@ -99,31 +172,12 @@ public class SignatureProcessor {
         signedDocument = infoAfirma.getDocumentoFirmado().getContenido();
       }
     }
-    this.signedDocument = signedDocument;
 
-    // Obtenemos los datos generales de la firma y los datos que se firmaron
-    byte[] signedData = null;
-    try {
-      this.signInfo = this.signer.getSignInfo(signature);
-      signedData = this.signer.getData(signature);
-    } catch (Exception e) {
-      e.printStackTrace();
-      throw new AOException("Ocurrio un problema al analizar el objeto de firma", e);
-    }
-
-    // Analizamos los datos firmados
-    if (signedData != null) {
-      this.dataInfo = new AOSignedDataInfo();
-      // this.dataInfo.setDataMimeType(signer.getDataMimeType(signedData));
-      MimeHelper mimeHelper = new MimeHelper(signature);
-      this.dataInfo.setDataMimeType(mimeHelper.getMimeType());
-      this.dataInfo.setData(signedData);
-      // this.dataInfo = ViewerUtils.analizeData(signedData);
-    }
+    return signedDocument;
   }
 
-  private byte[] obtainSignedDocument() throws Exception {
-    SignedData signedData = SignedDataExtractor.getDataFromSign(signatureData);
+  private byte[] obtainSignedDocument(byte[] signature) throws EeutilException {
+    SignedData signedData = SignedDataExtractor.getDataFromSign(signature);
     return signedData.getContenido();
   }
 
@@ -137,19 +191,28 @@ public class SignatureProcessor {
    * @throws IOException
    * @throws AOInvalidFormatException
    */
-  public AOTreeModel generateCertificatesTree() throws AOInvalidFormatException, IOException {
+  public AOTreeModel generateCertificatesTree(byte[] signature) throws EeutilException {
 
-    // Si todavia no hemos obtenido el arbol de firmas, lo obtenemos ahora
-    // y lo guardamos
-    if (this.signTree == null) {
-      // try {
-      this.signTree = this.signer.getSignersStructure(this.signatureData, true);
-      // } catch (Exception e) {
-      // e.printStackTrace();
-      // }
+
+
+    AOTreeModel signTree = null;
+
+    // esto tiene que ir siempre antes de AOSignerFactory.getSigner
+    if (PdfEncr.isProtectedPdf(signature)) {
+      throw new EeutilException(
+          "Error en generateCertificatesTree. El fichero pdf tiene contrase�a y no se puede procesar");
     }
 
-    return this.signTree;
+    AOSigner signer = new AOSignerWrapperEeutils().wrapperGetSigner(signature);
+
+    try {
+      signTree = signer.getSignersStructure(signature, true);
+    } catch (Exception e) {
+      throw new EeutilException(e.getMessage(), e);
+    }
+
+
+    return signTree;
   }
 
   /**
@@ -160,14 +223,13 @@ public class SignatureProcessor {
    * @throws IOException
    * @throws AOInvalidFormatException
    */
-  public byte[] signatureValue() throws AOInvalidFormatException, IOException {
+  public byte[] signatureValue(byte[] signature) throws EeutilException {
 
-    if (this.signTree == null) {
-      generateCertificatesTree();
-    }
+
+    AOTreeModel signTree = generateCertificatesTree(signature);
 
     Vector<byte[]> result = new Vector<byte[]>();
-    getPKCS1Values(result, (AOTreeNode) this.signTree.getRoot());
+    getPKCS1Values(result, (AOTreeNode) signTree.getRoot());
 
     if (result.size() == 0)
       return null;
@@ -198,120 +260,11 @@ public class SignatureProcessor {
     }
   }
 
-  /**
-   * Recupera la informacion de los datos firmados. Si no se ha realizado el an&aacute;lisis de la
-   * firma o esta no contenida datos, se devolvera <code>null</code>.
-   * 
-   * @return Informaci&oacute;n de los datos firmados.
-   */
-  public AOSignedDataInfo getDataInfo() {
-    return this.dataInfo;
-  }
 
-  /**
-   * Recupera la informaci&oacute;n de firma. Si no se ha realizado el an&aacute;lisis de la firma,
-   * se devolvera <code>null</code>.
-   * 
-   * @return Informaci&oacute;n de la firma.
-   */
-  public AOSignInfo getSignInfo() {
-    return this.signInfo;
-  }
 
-  /**
-   * Recupera la firma que se est&aacute; procesando.
-   * 
-   * @return Firma electr&oacute;nica.
-   */
-  public byte[] getSign() {
-    return this.signatureData;
-  }
-
-  /*
-   * public SignatureProcessorResponseDocument transformXML(){ SignatureProcessorResponseDocument
-   * response = null; try{ response = SignatureProcessorResponseDocument.Factory.newInstance();
-   * final SignatureProcessorResponseType signatureProcessorResponseType =
-   * response.addNewSignatureProcessorResponse(); signatureProcessorResponseType.setError(00);
-   * signatureProcessorResponseType.setErrorMessage(""); final ResultType result =
-   * signatureProcessorResponseType.addNewResult(); final SignedDataInfoType signedDataInfoXML =
-   * result.addNewSignedDataInfo(); transform(signedDataInfoXML, dataInfo); final SignInfoType
-   * signInfoXML = result.addNewSignInfo(); transform(signInfoXML, signInfo); final SignTreeType
-   * signTreeXML = result.addNewSignTree(); final Object root =
-   * generateCertificatesTree().getRoot(); transform(signTreeXML, (TreeNode) root); }catch
-   * (Exception ex) { ex.printStackTrace(); if (response != null) {
-   * response.getSignatureProcessorResponse().setError(99);
-   * response.getSignatureProcessorResponse().setErrorMessage(ex.getMessage()); } }
-   * 
-   * return response; }
-   */
-  /*
-   * private void transform(SignTreeType signTreeXML, TreeNode signTreeIn) { final TreeSigners
-   * treeSigners = signTreeXML.addNewTreeSigners(); for(int i=0; i<signTreeIn.getChildCount(); i++){
-   * final TreeSignerInfoType newSigner = treeSigners.addNewSigner(); transform((TreeNode)
-   * signTreeIn.getChildAt(i),newSigner); } }
-   */
-
-  /*
-   * private void transform(TreeNode node, TreeSignerInfoType newSigner) { //if(
-   * ((DefaultMutableTreeNode)node).getUserObject() instanceof AOSimpleSignInfo) { if(
-   * ((TreeNode)node).getUserObject() instanceof AOSimpleSignInfo) { //final AOSimpleSignInfo
-   * aoSimpleSignInfo = (AOSimpleSignInfo) ((DefaultMutableTreeNode)node).getUserObject(); final
-   * AOSimpleSignInfo aoSimpleSignInfo = (AOSimpleSignInfo) ((TreeNode)node).getUserObject();
-   * newSigner.setSignAlgorithm(aoSimpleSignInfo.getSignAlgorithm());
-   * newSigner.setSignFormat(aoSimpleSignInfo.getSignFormat()); final Calendar
-   * calendarSigningTime=Calendar.getInstance();
-   * calendarSigningTime.setTime(aoSimpleSignInfo.getSigningTime());
-   * newSigner.setSigningTime(calendarSigningTime); final Date[] calendar =
-   * aoSimpleSignInfo.getTimestampingTime(); final TimestampingTime newTimestampingTime =
-   * newSigner.addNewTimestampingTime(); if (calendar != null) { for (int j = 0; j <
-   * calendar.length; j++) { final XmlDate newTime = newTimestampingTime.addNewTime();
-   * newTime.setDateValue(calendar[j]); } } newSigner.setPkcs1(aoSimpleSignInfo.getPkcs1()); final
-   * Certs certs = newSigner.addNewCerts(); transform(certs, aoSimpleSignInfo.getCerts()); final
-   * TreeSignerInfo newTreeSignerInfo = newSigner.addNewTreeSignerInfo(); for(int j=0;
-   * j<node.getChildCount(); j++) { final TreeSignerInfoType newSignTree =
-   * newTreeSignerInfo.addNewSignTree(); transform((TreeNode) node.getChildAt(j), newSignTree); }
-   * //newSigner.setPolicyInfo(aoSimpleSignInfo.); } }
-   * 
-   * private void transform(Certs certs, X509Certificate[] certsIn) { if (certsIn != null){ for (int
-   * i = 0; i < certsIn.length; i++) { final X509Certificate certificate = certsIn[i]; final
-   * X509CertificateType newCertificate = certs.addNewCertificate();
-   * newCertificate.setVersion(certificate.getVersion()); if (certificate.getIssuerDN()!= null)
-   * newCertificate.setIssuerDN(certificate.getIssuerDN().getName());
-   * transform(newCertificate.addNewIssuerX500Principal(), certificate.getIssuerX500Principal()); if
-   * (certificate.getSubjectDN()!= null)
-   * newCertificate.setSubjectDN(certificate.getSubjectDN().getName());
-   * transform(newCertificate.addNewSubjectX500OPrincipal(), certificate.getSubjectX500Principal());
-   * if (certificate.getNotBefore()!= null){ final Calendar
-   * calendarNotBefore=Calendar.getInstance();
-   * calendarNotBefore.setTime(certificate.getNotBefore());
-   * newCertificate.setNotBefore(calendarNotBefore); } if (certificate.getNotAfter()!= null){ final
-   * Calendar calendarNotAfter=Calendar.getInstance();
-   * calendarNotAfter.setTime(certificate.getNotAfter());
-   * newCertificate.setNotAfter(calendarNotAfter); }
-   * newCertificate.setSignature(certificate.getSignature());
-   * newCertificate.setSigAlgName(certificate.getSigAlgName());
-   * newCertificate.setSigAlgOID(certificate.getSigAlgOID());
-   * newCertificate.setSigAlgParams(certificate.getSigAlgParams()); } } }
-   * 
-   * private void transform(X500PrincipalType newIssuerX500Principal, X500Principal
-   * issuerX500Principal) { newIssuerX500Principal.setName(issuerX500Principal.getName());
-   * newIssuerX500Principal.setEncoded(issuerX500Principal.getEncoded()); }
-   * 
-   * private void transform(SignedDataInfoType signedDataInfoXML, AOSignedDataInfo dataInfoIn) {
-   * signedDataInfoXML.setDataDescription(dataInfoIn.getDataDescription());
-   * signedDataInfoXML.setDataExtension(dataInfoIn.getDataExtension());
-   * signedDataInfoXML.setDataMimeType(dataInfoIn.getDataMimeType());
-   * signedDataInfoXML.setData(dataInfoIn.getData()); }
-   * 
-   * private void transform(SignInfoType signInfoXML, AOSignInfo signInfoIn) {
-   * signInfoXML.setFormat(signInfoIn.getFormat());
-   * signInfoXML.setB64VerificationCode(signInfoIn.getB64VerificationCode());
-   * signInfoXML.setVariant(signInfoIn.getVariant()); }
-   */
-
-  public byte[] generateB64VerificationCode() throws AOInvalidFormatException, IOException {
+  public byte[] generateB64VerificationCode(byte[] signature) throws EeutilException {
     final Vector<byte[]> vector = new Vector<byte[]>();
-    final AOTreeNode root = (AOTreeNode) generateCertificatesTree().getRoot();
+    final AOTreeNode root = (AOTreeNode) generateCertificatesTree(signature).getRoot();
     generateB64VerificationCode(root, vector);
     return MathUtils.xorArrays(vector);
   }
@@ -322,14 +275,15 @@ public class SignatureProcessor {
     }
   }
 
-  /*
-   * public static byte[] getBytes(InputStream is) throws IOException { is.reset(); return
-   * IOUtils.toByteArray(is); }
-   */
+  public static InputStream getInputStream(byte[] ba) throws EeutilException {
 
-  public static InputStream getInputStream(byte[] ba) throws IOException {
+    try {
 
-    return new ByteArrayInputStream(ba);
+      return new ByteArrayInputStream(ba);
+
+    } catch (Exception e) {
+      throw new EeutilException(e.getMessage(), e);
+    }
   }
 
   public byte[] fromBase64StringToByteArray(String s) {
@@ -342,16 +296,16 @@ public class SignatureProcessor {
     return Base64.encodeBase64String(s);
   }
 
-  public byte[] fromInputStreamToByteArray(InputStream is) {
+  public byte[] fromInputStreamToByteArray(InputStream is) throws EeutilException {
 
     byte[] copyToByteArray = null;
     try {
-      if (is.markSupported() == true)
+      if (is.markSupported())
         is.reset();
       copyToByteArray = FileCopyUtils.copyToByteArray(is);
     } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      // logger.error(e.getMessage(),e);
+      throw new EeutilException(e.getMessage(), e);
     }
 
     return copyToByteArray;
@@ -359,16 +313,9 @@ public class SignatureProcessor {
 
 
 
-  public String fromInputStreamToBase64String(InputStream is) {
+  public String fromInputStreamToBase64String(InputStream is) throws EeutilException {
     byte[] fromInputStreamToByteArray = fromInputStreamToByteArray(is);
     return fromByteArrayToBase64(fromInputStreamToByteArray);
   }
 
-  public void setSignedDocument(byte[] signedDocument) {
-    this.signedDocument = signedDocument;
-  }
-
-  public byte[] getSignedDocument() {
-    return this.signedDocument;
-  }
 }

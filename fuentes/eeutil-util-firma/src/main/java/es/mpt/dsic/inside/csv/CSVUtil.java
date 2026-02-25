@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2012-13 MINHAP, Gobierno de España This program is licensed and may be used,
- * modified and redistributed under the terms of the European Public License (EUPL), either version
- * 1.1 or (at your option) any later version as soon as they are approved by the European
- * Commission. Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and
- * more details. You should have received a copy of the EUPL1.1 license along with this program; if
- * not, you may find it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * Copyright (C) 2025, Gobierno de España This program is licensed and may be used, modified and
+ * redistributed under the terms of the European Public License (EUPL), either version 1.1 or (at
+ * your option) any later version as soon as they are approved by the European Commission. Unless
+ * required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and more details. You
+ * should have received a copy of the EUPL1.1 license along with this program; if not, you may find
+ * it at http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  */
 
 package es.mpt.dsic.inside.csv;
@@ -25,7 +25,7 @@ public class CSVUtil {
 
   public static final String CSV_SEPARATOR = "-";
 
-  protected final static Log logger = LogFactory.getLog(CSVUtil.class);
+  protected static final Log logger = LogFactory.getLog(CSVUtil.class);
 
   public static byte[] generateDigest(byte[] toDigest, String alg) throws NoSuchAlgorithmException {
     MessageDigest md = MessageDigest.getInstance(alg);
@@ -33,19 +33,19 @@ public class CSVUtil {
   }
 
   public static byte[] generateRandomNumber(int numBytes) {
-    /*
+    /**
      * logger.debug("new SecureRandom()"); SecureRandom randomSeed = new SecureRandom();
      * logger.debug("randomSeed.generateSeed(numBytes)"); // la siguiente instruccion tarda 15
-     * segundos en desarrollo... byte[] seed = randomSeed.generateSeed(numBytes);
-     * logger.debug("new SecureRandom (seed)"); SecureRandom random = new SecureRandom (seed);
-     * logger.debug("new byte[numBytes]"); byte[] randomBytes = new byte[numBytes];
+     * segundos en desarrollo... byte[] seed = randomSeed.generateSeed(numBytes); logger.debug("new
+     * SecureRandom (seed)"); SecureRandom random = new SecureRandom (seed); logger.debug("new
+     * byte[numBytes]"); byte[] randomBytes = new byte[numBytes];
      * logger.debug("random.nextBytes(randomBytes);"); random.nextBytes(randomBytes);
      */
 
     logger.debug("new SecureRandom()");
     SecureRandom random = new SecureRandom();
     logger.debug("new byte[numBytes];");
-    byte randomBytes[] = new byte[numBytes];
+    byte[] randomBytes = new byte[numBytes];
     logger.debug("random.nextBytes(randomBytes);");
     random.nextBytes(randomBytes);
 
@@ -66,7 +66,7 @@ public class CSVUtil {
   }
 
   public static String toBinaryString(byte[] bytes) {
-    StringBuffer sb = new StringBuffer("");
+    StringBuilder sb = new StringBuilder("");
 
     for (byte b : bytes) {
       sb.append(toBinaryString(b));
@@ -75,7 +75,7 @@ public class CSVUtil {
   }
 
   public static String caracteresPares(String cadena) {
-    StringBuffer sb = new StringBuffer("");
+    StringBuilder sb = new StringBuilder("");
 
     for (int i = 0; i < cadena.length(); i++) {
       if (i % 2 == 0) {
@@ -87,7 +87,7 @@ public class CSVUtil {
 
   public static String bigBinaryToHex(String s) {
     int maxLength = 4;
-    StringBuffer sb = new StringBuffer("");
+    StringBuilder sb = new StringBuilder("");
     if (s.length() < maxLength) {
       sb.append(binaryToHex(rellenarCeros(s, maxLength)));
     } else {
@@ -99,9 +99,9 @@ public class CSVUtil {
       }
 
       for (int i = 0; i < trozos; i++) {
-        int i_inicial = i * maxLength;
-        int i_final = i_inicial + maxLength;
-        sb.append(binaryToHex(s.substring(i_inicial, i_final)));
+        int iInicial = i * maxLength;
+        int iFinal = iInicial + maxLength;
+        sb.append(binaryToHex(s.substring(iInicial, iFinal)));
       }
 
     }
@@ -109,8 +109,7 @@ public class CSVUtil {
   }
 
   private static String binaryToHex(String s) {
-    String hex = Long.toHexString(Long.parseLong(s, 2));
-    return hex;
+    return Long.toHexString(Long.parseLong(s, 2));
   }
 
   public static String rellenarCeros(String s, int length) {
@@ -166,7 +165,7 @@ public class CSVUtil {
 
   /**
    * Formatea el csv: Cada "num" elementos escribe el String "ss" Ejemplo: csv="123456789", num=4,
-   * ss="-" devolvería 1234-6789
+   * ss="-" devolveria 1234-6789
    * 
    * @param csv csv a formatear
    * @param num cada cuantos elementos se desea escribir el String "ss"
@@ -195,16 +194,12 @@ public class CSVUtil {
     }
 
   }
-
-  public static void main(String[] args) {
-    // String numerito = "0000 0001 0010 0011 0100 0101 0110 0111 1000 1001 1010 1011 1100 1101 1110
-    // 1111";
-    String numerito =
-        "01 0010 0011 0000 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101";
-    String hex = bigBinaryToHex(numerito.replaceAll(" ", ""));
-    System.out.println(hex);
-  }
-
+  /***
+   * public static void main (String[] args) { //String numerito = "0000 0001 0010 0011 0100 0101
+   * 0110 0111 1000 1001 1010 1011 1100 1101 1110 1111"; String numerito = "01 0010 0011 0000 1101
+   * 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101 1101";
+   * String hex = bigBinaryToHex (numerito.replaceAll(" ", "")); System.out.println(hex); }
+   ***/
 
 }
 
