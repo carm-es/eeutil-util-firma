@@ -72,6 +72,14 @@
           <groupId>org.ow2.asm</groupId>
           <artifactId>asm-debug-all</artifactId>
         </exclusion>
+	<exclusion>
+	  <groupId>log4j</groupId>
+	  <artifactId>*</artifactId>
+	</exclusion>
+	<exclusion>
+	  <groupId>org.graylog2</groupId>
+	  <artifactId>*</artifactId>
+	</exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -79,7 +87,15 @@
       <artifactId>eeutil-comunes</artifactId>
       <version>${version.eeutils-shared}</version>
       <exclusions>
-			</exclusions>
+	<exclusion>
+	  <groupId>log4j</groupId>
+	  <artifactId>*</artifactId>
+	</exclusion>
+	<exclusion>
+	  <groupId>org.graylog2</groupId>
+	  <artifactId>*</artifactId>
+	</exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>es.gob.ad.gestdoc</groupId>
@@ -94,7 +110,25 @@
           <groupId>stax</groupId>
           <artifactId>stax-api</artifactId>
         </exclusion>
+	<exclusion>
+	  <groupId>log4j</groupId>
+	  <artifactId>*</artifactId>
+	</exclusion>
+	<exclusion>
+	  <groupId>org.graylog2</groupId>
+	  <artifactId>*</artifactId>
+	</exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-web</artifactId>
+      <version>${logging.log4j}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-1.2-api</artifactId>
+      <version>${logging.log4j}</version>
     </dependency>
     <!-- pdfoptmizer pdftools  -->
     <dependency>
