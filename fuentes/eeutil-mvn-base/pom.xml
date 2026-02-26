@@ -41,6 +41,7 @@
     <afirma.version>1.7.0</afirma.version>
     <sonar.maven.version>3.7.0.1746</sonar.maven.version>
     <logging.log4j>2.6.2</logging.log4j>
+    <pdfbox.version>2.0.29</pdfbox.version>
   </properties>
   <distributionManagement>
     <repository>

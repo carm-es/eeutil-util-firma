@@ -130,13 +130,17 @@
       <artifactId>log4j-1.2-api</artifactId>
       <version>${logging.log4j}</version>
     </dependency>
-    <!-- pdfoptmizer pdftools  -->
+    <!-- PDF TOOLS -->
     <dependency>
-      <groupId>com.pdfTools</groupId>
-      <artifactId>pDFOptimizer-windows</artifactId>
-      <version>4.8</version>
-      <scope>provided</scope>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>pdfbox</artifactId>
+      <version>${pdfbox.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>xmpbox</artifactId>
+      <version>${pdfbox.version}</version>
+    </dependency>    
     <!--RUNTIME JODCONVERTER-->
     <dependency>
       <groupId>org.openoffice</groupId>
@@ -269,12 +273,6 @@
           <type>jar</type>
           <scope>provided</scope>
         </dependency>
-        <dependency>
-          <groupId>com.pdfTools</groupId>
-          <artifactId>pDFOptimizer-linux</artifactId>
-          <version>4.8</version>
-          <scope>runtime</scope>
-        </dependency>
       </dependencies>
     </profile>
     <profile>
@@ -289,12 +287,6 @@
           <version>11.2.0.4</version>
           <type>jar</type>
           <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>com.pdfTools</groupId>
-          <artifactId>pDFOptimizer-linux</artifactId>
-          <version>4.8</version>
-          <scope>runtime</scope>
         </dependency>
       </dependencies>
     </profile>
