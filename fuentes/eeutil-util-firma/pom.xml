@@ -141,6 +141,11 @@
       <artifactId>xmpbox</artifactId>
       <version>${pdfbox.version}</version>
     </dependency>    
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-taglibs</artifactId>
+      <version>3.2.10.RELEASE</version>
+    </dependency>
     <!--RUNTIME JODCONVERTER-->
     <dependency>
       <groupId>org.openoffice</groupId>
