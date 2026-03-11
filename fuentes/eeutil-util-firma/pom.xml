@@ -80,6 +80,10 @@
 	  <groupId>org.graylog2</groupId>
 	  <artifactId>*</artifactId>
 	</exclusion>
+        <exclusion>
+          <groupId>net.sf.ehcache</groupId>
+          <artifactId>ehcache-core</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -95,6 +99,10 @@
 	  <groupId>org.graylog2</groupId>
 	  <artifactId>*</artifactId>
 	</exclusion>
+        <exclusion>
+          <groupId>net.sf.ehcache</groupId>
+          <artifactId>ehcache-core</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -118,6 +126,10 @@
 	  <groupId>org.graylog2</groupId>
 	  <artifactId>*</artifactId>
 	</exclusion>
+        <exclusion>
+          <groupId>net.sf.ehcache</groupId>
+          <artifactId>ehcache-core</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
