@@ -2,10 +2,10 @@
 
 Instalación y evolutivo de la versión distribuible de Eeutil-Util-Firma.
 
-Se parte de la versión distribuible que se ofrece en el área de descargas de la Suite Inside del Centro de Transferencia Tecnológica:
-*  https://administracionelectronica.gob.es/ctt/inside/descargas -> Versión distribuible (Código fuente) -> Distribuible Eeutil-Util-Firma v4.2.0 (noviembre 2018)
+Se parte de la versión distribuible que se ofrece en el área de descargas de la Suite CSVCreator del Centro de Transferencia Tecnológica:
+*  [https://administracionelectronica.gob.es/ctt/csvcreator/descargas](https://administracionelectronica.gob.es/ctt/csvcreator/descargas) -> Versión distribuible (Código fuente) -> Distribuible Eeutil-Util-Firma v6.8.2 (enero 2026)
 
-Eeutils(CSV Creator) es el componente de la Suite CSV que agrupa diversas funcionalidades relacionadas con la generación de CSV y gestión de firmas e informes. Eeutils(CSV Creator) se divide en cinco módulos, entre los que se encuentra Eeutil-Util-Firma, que **permite obtener CSVs a partir de firmas o justificantes de firmas**.
+Eeutils(CSV Creator) es el componente de la Suite CSV que agrupa diversas funcionalidades relacionadas con la generación de CSV y gestión de firmas e informes. Eeutils(CSV Creator) se divide en siete módulos, entre los que se encuentra Eeutil-Util-Firma, que **permite generar CSVs, justificantes de firma, así como validar hash**.
 
 ### ¿Quién hace uso de este módulo en la CARM?
 
@@ -16,3 +16,4 @@ La aplicación INSIDE esta haciendo uso de dos operaciones de este módulo, a sa
 * **generarCSVAmbito** : Se llama a través de los servicios ``/saveDocument``, ``/generarDocumento`` y ``/editarDocumento/updateDocument`` del controlador de documentos de INSIDE.
 
 El resto de operaciones de este módulo **no** están siendo utilizadas por la aplicación INSIDE.
+
